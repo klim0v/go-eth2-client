@@ -20,11 +20,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/attestantio/go-eth2-client/spec/electra"
-
 	"github.com/attestantio/go-eth2-client/spec"
 	"github.com/attestantio/go-eth2-client/spec/bellatrix"
 	"github.com/attestantio/go-eth2-client/spec/capella"
+	"github.com/attestantio/go-eth2-client/spec/electra"
 	"github.com/attestantio/go-eth2-client/spec/phase0"
 	"github.com/pkg/errors"
 )
@@ -183,6 +182,7 @@ func (p *PayloadAttributesV1) unpack(data *payloadAttributesV1JSON) error {
 	if data.Timestamp == "" {
 		return errors.New("payload attributes timestamp missing")
 	}
+
 	p.Timestamp, err = strconv.ParseUint(data.Timestamp, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes timestamp")
@@ -191,25 +191,31 @@ func (p *PayloadAttributesV1) unpack(data *payloadAttributesV1JSON) error {
 	if data.PrevRandao == "" {
 		return errors.New("payload attributes prev randao missing")
 	}
+
 	prevRandao, err := hex.DecodeString(strings.TrimPrefix(data.PrevRandao, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes prev randao")
 	}
+
 	if len(prevRandao) != 32 {
 		return errors.New("incorrect length for payload attributes prev randao")
 	}
+
 	copy(p.PrevRandao[:], prevRandao)
 
 	if data.SuggestedFeeRecipient == "" {
 		return errors.New("payload attributes suggested fee recipient missing")
 	}
+
 	feeRecipient, err := hex.DecodeString(strings.TrimPrefix(data.SuggestedFeeRecipient, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes suggested fee recipient")
 	}
+
 	if len(feeRecipient) != bellatrix.FeeRecipientLength {
 		return errors.New("incorrect length for payload attributes suggested fee recipient")
 	}
+
 	copy(p.SuggestedFeeRecipient[:], feeRecipient)
 
 	return nil
@@ -231,6 +237,7 @@ func (p *PayloadAttributesV2) unpack(data *payloadAttributesV2JSON) error {
 	if data.Timestamp == "" {
 		return errors.New("payload attributes timestamp missing")
 	}
+
 	p.Timestamp, err = strconv.ParseUint(data.Timestamp, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes timestamp")
@@ -239,35 +246,43 @@ func (p *PayloadAttributesV2) unpack(data *payloadAttributesV2JSON) error {
 	if data.PrevRandao == "" {
 		return errors.New("payload attributes prev randao missing")
 	}
+
 	prevRandao, err := hex.DecodeString(strings.TrimPrefix(data.PrevRandao, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes prev randao")
 	}
+
 	if len(prevRandao) != 32 {
 		return errors.New("incorrect length for payload attributes prev randao")
 	}
+
 	copy(p.PrevRandao[:], prevRandao)
 
 	if data.SuggestedFeeRecipient == "" {
 		return errors.New("payload attributes suggested fee recipient missing")
 	}
+
 	feeRecipient, err := hex.DecodeString(strings.TrimPrefix(data.SuggestedFeeRecipient, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes suggested fee recipient")
 	}
+
 	if len(feeRecipient) != bellatrix.FeeRecipientLength {
 		return errors.New("incorrect length for payload attributes suggested fee recipient")
 	}
+
 	copy(p.SuggestedFeeRecipient[:], feeRecipient)
 
 	if data.Withdrawals == nil {
 		return errors.New("payload attributes withdrawals missing")
 	}
+
 	for i := range data.Withdrawals {
 		if data.Withdrawals[i] == nil {
 			return fmt.Errorf("withdrawals entry %d missing", i)
 		}
 	}
+
 	p.Withdrawals = data.Withdrawals
 
 	return nil
@@ -289,6 +304,7 @@ func (p *PayloadAttributesV3) unpack(data *payloadAttributesV3JSON) error {
 	if data.Timestamp == "" {
 		return errors.New("payload attributes timestamp missing")
 	}
+
 	p.Timestamp, err = strconv.ParseUint(data.Timestamp, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes timestamp")
@@ -297,47 +313,58 @@ func (p *PayloadAttributesV3) unpack(data *payloadAttributesV3JSON) error {
 	if data.PrevRandao == "" {
 		return errors.New("payload attributes prev randao missing")
 	}
+
 	prevRandao, err := hex.DecodeString(strings.TrimPrefix(data.PrevRandao, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes prev randao")
 	}
+
 	if len(prevRandao) != 32 {
 		return errors.New("incorrect length for payload attributes prev randao")
 	}
+
 	copy(p.PrevRandao[:], prevRandao)
 
 	if data.SuggestedFeeRecipient == "" {
 		return errors.New("payload attributes suggested fee recipient missing")
 	}
+
 	feeRecipient, err := hex.DecodeString(strings.TrimPrefix(data.SuggestedFeeRecipient, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes suggested fee recipient")
 	}
+
 	if len(feeRecipient) != bellatrix.FeeRecipientLength {
 		return errors.New("incorrect length for payload attributes suggested fee recipient")
 	}
+
 	copy(p.SuggestedFeeRecipient[:], feeRecipient)
 
 	if data.Withdrawals == nil {
 		return errors.New("payload attributes withdrawals missing")
 	}
+
 	for i := range data.Withdrawals {
 		if data.Withdrawals[i] == nil {
 			return fmt.Errorf("withdrawals entry %d missing", i)
 		}
 	}
+
 	p.Withdrawals = data.Withdrawals
 
 	if data.ParentBeaconBlockRoot == "" {
 		return errors.New("payload attributes parent beacon block root missing")
 	}
+
 	parentBeaconBlockRoot, err := hex.DecodeString(strings.TrimPrefix(data.ParentBeaconBlockRoot, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes parent beacon block root")
 	}
+
 	if len(parentBeaconBlockRoot) != phase0.RootLength {
 		return errors.New("incorrect length for payload attributes parent beacon block root")
 	}
+
 	copy(p.ParentBeaconBlockRoot[:], parentBeaconBlockRoot)
 
 	return nil
@@ -359,6 +386,7 @@ func (p *PayloadAttributesV4) unpack(data *payloadAttributesV4JSON) error {
 	if data.Timestamp == "" {
 		return errors.New("payload attributes timestamp missing")
 	}
+
 	p.Timestamp, err = strconv.ParseUint(data.Timestamp, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes timestamp")
@@ -367,47 +395,58 @@ func (p *PayloadAttributesV4) unpack(data *payloadAttributesV4JSON) error {
 	if data.PrevRandao == "" {
 		return errors.New("payload attributes prev randao missing")
 	}
+
 	prevRandao, err := hex.DecodeString(strings.TrimPrefix(data.PrevRandao, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes prev randao")
 	}
+
 	if len(prevRandao) != 32 {
 		return errors.New("incorrect length for payload attributes prev randao")
 	}
+
 	copy(p.PrevRandao[:], prevRandao)
 
 	if data.SuggestedFeeRecipient == "" {
 		return errors.New("payload attributes suggested fee recipient missing")
 	}
+
 	feeRecipient, err := hex.DecodeString(strings.TrimPrefix(data.SuggestedFeeRecipient, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes suggested fee recipient")
 	}
+
 	if len(feeRecipient) != bellatrix.FeeRecipientLength {
 		return errors.New("incorrect length for payload attributes suggested fee recipient")
 	}
+
 	copy(p.SuggestedFeeRecipient[:], feeRecipient)
 
 	if data.Withdrawals == nil {
 		return errors.New("payload attributes withdrawals missing")
 	}
+
 	for i := range data.Withdrawals {
 		if data.Withdrawals[i] == nil {
 			return fmt.Errorf("withdrawals entry %d missing", i)
 		}
 	}
+
 	p.Withdrawals = data.Withdrawals
 
 	if data.ParentBeaconBlockRoot == "" {
 		return errors.New("payload attributes parent beacon block root missing")
 	}
+
 	parentBeaconBlockRoot, err := hex.DecodeString(strings.TrimPrefix(data.ParentBeaconBlockRoot, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for payload attributes parent beacon block root")
 	}
+
 	if len(parentBeaconBlockRoot) != phase0.RootLength {
 		return errors.New("incorrect length for payload attributes parent beacon block root")
 	}
+
 	copy(p.ParentBeaconBlockRoot[:], parentBeaconBlockRoot)
 
 	for i := range data.DepositRequests {
@@ -415,6 +454,7 @@ func (p *PayloadAttributesV4) unpack(data *payloadAttributesV4JSON) error {
 			return fmt.Errorf("deposit requests entry %d missing", i)
 		}
 	}
+
 	p.DepositRequests = data.DepositRequests
 
 	for i := range data.WithdrawalRequests {
@@ -422,6 +462,7 @@ func (p *PayloadAttributesV4) unpack(data *payloadAttributesV4JSON) error {
 			return fmt.Errorf("withdraw requests entry %d missing", i)
 		}
 	}
+
 	p.WithdrawalRequests = data.WithdrawalRequests
 
 	for i := range data.ConsolidationRequests {
@@ -429,6 +470,7 @@ func (p *PayloadAttributesV4) unpack(data *payloadAttributesV4JSON) error {
 			return fmt.Errorf("consolidation requests entry %d missing", i)
 		}
 	}
+
 	p.ConsolidationRequests = data.ConsolidationRequests
 
 	return nil
@@ -436,14 +478,17 @@ func (p *PayloadAttributesV4) unpack(data *payloadAttributesV4JSON) error {
 
 // MarshalJSON implements json.Marshaler.
 func (e *PayloadAttributesEvent) MarshalJSON() ([]byte, error) {
-	var payloadAttributes []byte
-	var err error
+	var (
+		payloadAttributes []byte
+		err               error
+	)
 
 	switch e.Version {
 	case spec.DataVersionBellatrix:
 		if e.Data.V1 == nil {
 			return nil, errors.New("no payload attributes v1 data")
 		}
+
 		payloadAttributes, err = json.Marshal(&payloadAttributesV1JSON{
 			Timestamp:             strconv.FormatUint(e.Data.V1.Timestamp, 10),
 			PrevRandao:            fmt.Sprintf("%#x", e.Data.V1.PrevRandao),
@@ -456,6 +501,7 @@ func (e *PayloadAttributesEvent) MarshalJSON() ([]byte, error) {
 		if e.Data.V2 == nil {
 			return nil, errors.New("no payload attributes v2 data")
 		}
+
 		payloadAttributes, err = json.Marshal(&payloadAttributesV2JSON{
 			Timestamp:             strconv.FormatUint(e.Data.V2.Timestamp, 10),
 			PrevRandao:            fmt.Sprintf("%#x", e.Data.V2.PrevRandao),
@@ -469,6 +515,7 @@ func (e *PayloadAttributesEvent) MarshalJSON() ([]byte, error) {
 		if e.Data.V3 == nil {
 			return nil, errors.New("no payload attributes v3 data")
 		}
+
 		payloadAttributes, err = json.Marshal(&payloadAttributesV3JSON{
 			Timestamp:             strconv.FormatUint(e.Data.V3.Timestamp, 10),
 			PrevRandao:            fmt.Sprintf("%#x", e.Data.V3.PrevRandao),
@@ -483,6 +530,7 @@ func (e *PayloadAttributesEvent) MarshalJSON() ([]byte, error) {
 		if e.Data.V4 == nil {
 			return nil, errors.New("no payload attributes v4 data")
 		}
+
 		payloadAttributes, err = json.Marshal(&payloadAttributesV4JSON{
 			Timestamp:             strconv.FormatUint(e.Data.V4.Timestamp, 10),
 			PrevRandao:            fmt.Sprintf("%#x", e.Data.V4.PrevRandao),
@@ -525,63 +573,86 @@ func (e *PayloadAttributesEvent) UnmarshalJSON(input []byte) error {
 	return e.unpack(&event)
 }
 
+// String returns a string version of the structure.
+func (e *PayloadAttributesEvent) String() string {
+	data, err := json.Marshal(e)
+	if err != nil {
+		return fmt.Sprintf("ERR: %v", err)
+	}
+
+	return string(data)
+}
+
 func (e *PayloadAttributesEvent) unpack(data *payloadAttributesEventJSON) error {
 	var err error
 
 	if data.Data == nil {
 		return errors.New("payload attributes data missing")
 	}
+
 	e.Data = &PayloadAttributesData{}
 
 	if data.Data.ProposerIndex == "" {
 		return errors.New("proposer index missing")
 	}
+
 	proposerIndex, err := strconv.ParseUint(data.Data.ProposerIndex, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for proposer index")
 	}
+
 	e.Data.ProposerIndex = phase0.ValidatorIndex(proposerIndex)
 
 	if data.Data.ProposalSlot == "" {
 		return errors.New("proposal slot missing")
 	}
+
 	proposalSlot, err := strconv.ParseUint(data.Data.ProposalSlot, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for proposal slot")
 	}
+
 	e.Data.ProposalSlot = phase0.Slot(proposalSlot)
 
 	if data.Data.ParentBlockNumber == "" {
 		return errors.New("parent block number missing")
 	}
+
 	parentBlockNumber, err := strconv.ParseUint(data.Data.ParentBlockNumber, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "invalid value for parent block number")
 	}
+
 	e.Data.ParentBlockNumber = parentBlockNumber
 
 	if data.Data.ParentBlockRoot == "" {
 		return errors.New("parent block root missing")
 	}
+
 	parentBlockRoot, err := hex.DecodeString(strings.TrimPrefix(data.Data.ParentBlockRoot, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for parent block root")
 	}
+
 	if len(parentBlockRoot) != phase0.RootLength {
 		return errors.New("incorrect length for parent block root")
 	}
+
 	copy(e.Data.ParentBlockRoot[:], parentBlockRoot)
 
 	if data.Data.ParentBlockHash == "" {
 		return errors.New("parent block hash missing")
 	}
+
 	parentBlockHash, err := hex.DecodeString(strings.TrimPrefix(data.Data.ParentBlockHash, "0x"))
 	if err != nil {
 		return errors.Wrap(err, "invalid value for parent block hash")
 	}
+
 	if len(parentBlockHash) != phase0.Hash32Length {
 		return errors.New("incorrect length for parent block hash")
 	}
+
 	copy(e.Data.ParentBlockHash[:], parentBlockHash)
 
 	if data.Data.PayloadAttributes == nil {
@@ -591,46 +662,45 @@ func (e *PayloadAttributesEvent) unpack(data *payloadAttributesEventJSON) error 
 	switch data.Version {
 	case spec.DataVersionBellatrix:
 		var payloadAttributes PayloadAttributesV1
+
 		err = json.Unmarshal(data.Data.PayloadAttributes, &payloadAttributes)
 		if err != nil {
 			return err
 		}
+
 		e.Data.V1 = &payloadAttributes
 	case spec.DataVersionCapella:
 		var payloadAttributes PayloadAttributesV2
+
 		err = json.Unmarshal(data.Data.PayloadAttributes, &payloadAttributes)
 		if err != nil {
 			return err
 		}
+
 		e.Data.V2 = &payloadAttributes
 	case spec.DataVersionDeneb:
 		var payloadAttributes PayloadAttributesV3
+
 		err = json.Unmarshal(data.Data.PayloadAttributes, &payloadAttributes)
 		if err != nil {
 			return err
 		}
+
 		e.Data.V3 = &payloadAttributes
 	case spec.DataVersionElectra, spec.DataVersionFulu:
 		var payloadAttributes PayloadAttributesV4
+
 		err = json.Unmarshal(data.Data.PayloadAttributes, &payloadAttributes)
 		if err != nil {
 			return err
 		}
+
 		e.Data.V4 = &payloadAttributes
 	default:
 		return errors.New("unsupported data version")
 	}
+
 	e.Version = data.Version
 
 	return nil
-}
-
-// String returns a string version of the structure.
-func (e *PayloadAttributesEvent) String() string {
-	data, err := json.Marshal(e)
-	if err != nil {
-		return fmt.Sprintf("ERR: %v", err)
-	}
-
-	return string(data)
 }
